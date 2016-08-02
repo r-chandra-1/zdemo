@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h3>Search Your Property With Zillow</h3>
+    <h5>Enter an address and hit GO.</h5>
+    <form class="form-inline">
+        <input type="text" ng-model="address" required class="form-control input_l" ng-click="address = null" placeholder="Address" />
+        <input type="text" ng-model="city" required class="form-control input_m" ng-click="city = null" placeholder="City" />
+        <input type="text" ng-model="state" required class="form-control input_s" ng-click="state = null" placeholder="ST" />
+        <a href="#" ng-click="searchAddress()" class="btn btn-primary btn-large">GO &raquo;</a>
+    </form>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <p ng-show="processing">Searching .......</p>
+    </div>
+    <div ng-show="hasresults" class="col-md-12">
+        <h4>Showing results for: </h4><h5>{{result.address.street}}, {{result.address.city}}, {{result.address.state}} - {{result.address.zipcode}}</h5>
+        <div class="row">
+            <div class="col-md-4 box-zest" >
+                <h3>Zestimate</h3>
+                <ul class="list-unstyled">
+                    <li>Amount: <span>{{result.zestimate.amount['#text'] | currency}} {{result.zestimate.amount['@@currency']}}</span></li>
+                    <li>Updated: <span>{{result.zestimate['last-updated']}}</span></li>
+                    <li>Range: <span>{{result.zestimate.valuationRange.low['#text'] | currency}} - {{result.zestimate.valuationRange.high['#text'] | currency}}</span></li>
+                </ul>
+                <p> Want to see more details about this listing? <a href="{{result.links.homedetails}}" target="_blank">Click here</a></p>
+            </div>
+            <div class="col-md-6 box-loc">
+                <h5>Explore This Locality</h5>
+                <span class="label label-success"><a href="{{result.localRealEstate.region.links.overview}}" target="_blank">Explore {{result.localRealEstate.region['@@name']}}</a></span>
+                <span class="label label-info"><a href="{{result.localRealEstate.region.links.forSaleByOwner}}" target="_blank">Sale By Owner</a></span>
+                <span class="label label-warning"><a href="{{result.localRealEstate.region.links.forSale}}" target="_blank">More Listings</a></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 text-center">
+               
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-12 text-center">
+        <p ng-hide="hasresults"><span class="label label-danger">{{message}}</span></p>
+    </div>
+</div>

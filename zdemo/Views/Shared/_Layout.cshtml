@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zillow It</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/angular")
+    <script>
+        var app = angular.module("app", []);
+        app.controller("appCtrl", function($scope, $http) {
+
+            $scope.processing = false;
+            $scope.hasresults = false;
+
+            //default address
+            $scope.address = "22 Avalon # 3";
+            $scope.city = "Irvine";
+            $scope.state = "CA";
+
+            $scope.searchAddress = function() {
+                $scope.processing = true;
+                $http({
+                    method: 'POST',
+                    url: './Home/GetData',
+                    data: 'address=' + $scope.address + '&city=' + $scope.city + '&state=' + $scope.state + '',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                }).success(function (data, status, headers, config) {
+                    var output = data['SearchResults:searchresults'];
+                    if (output.response == undefined) {
+                        $scope.hasresults = false;
+                        $scope.message = output.message.text;
+                    } else {
+                        $scope.hasresults = true;
+                        $scope.result = output.response.results.result;
+                    }
+                    $scope.processing = false;
+                });
+            };
+        });
+    </script>
+</head>
+<body ng-controller="appCtrl">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <span class="logo">Zillow It</span>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+ </body>
+</html>
+
